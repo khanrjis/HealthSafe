@@ -1,0 +1,157 @@
+.blogs-page h1 {
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+}
+
+.blogs-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+
+.add-blog-form {
+  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  margin-bottom: 2rem;
+}
+
+.add-blog-form h2 {
+  color: var(--primary);
+  margin-bottom: 1.5rem;
+}
+
+.add-blog-form .form-group {
+  margin-bottom: 1rem;
+}
+
+.add-blog-form label {
+  display: block;
+  font-weight: 600;
+  color: var(--dark);
+  margin-bottom: 0.5rem;
+}
+
+.add-blog-form input,
+.add-blog-form textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  color: var(--dark);
+}
+
+.add-blog-form input:focus,
+.add-blog-form textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1);
+}
+
+.add-blog-form .btn {
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 1rem;
+}
+
+.blogs-filter {
+  margin-bottom: 2rem;
+}
+
+.filter-input {
+  width: 100%;
+  max-width: 500px;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+}
+
+.blogs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.blog-card-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.blog-card {
+  background: white;
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s;
+}
+
+.blog-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(15, 118, 110, 0.15);
+}
+
+.blog-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.blog-content {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.blog-card h3 {
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+}
+
+.blog-card .meta {
+  color: #64748b;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.blog-card .excerpt {
+  color: #475569;
+  flex: 1;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.read-btn {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+  align-self: flex-start;
+  transition: all 0.2s;
+}
+
+.read-btn:hover {
+  color: #0d5d57;
+  margin-left: 4px;
+}
+
+@media (max-width: 768px) {
+  .blogs-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .blogs-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-input {
+    max-width: 100%;
+  }
+}
