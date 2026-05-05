@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { API_URL } from '../api';
 import '../styles/Doctors.css';
 
@@ -37,8 +37,14 @@ const localDoctorImages = {
 };
 
 export default function Doctors() {
+  const location = useLocation();
   const [doctors, setDoctors] = useState(fallbackDoctors);
   const [filter, setFilter] = useState('');
+
+  useEffect(() => {
+    const query = new URLSearchParams(location.search).get('q') || '';
+    setFilter(query);
+  }, [location.search]);
 
   useEffect(() => {
     const loadDoctors = async () => {

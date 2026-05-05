@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const path = require('path');
 const connectDB = require('./config/db');
 const appointmentRoutes = require('./routes/appointments');
 const doctorRoutes = require('./routes/doctors');
@@ -22,6 +23,7 @@ app.get('/', (req, res) => {
   res.json({ message: 'PharmaMap backend running' });
 });
 
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/doctors', doctorRoutes);
 app.use('/api/reviews', reviewRoutes);
@@ -48,7 +50,7 @@ app.get('/api/seed', async (req, res) => {
       {
         name: 'Dr. Amir Ali',
         speciality: 'General Medicine',
-        image: 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&w=800&q=80',
+        image: 'https://images.unsplash.com/photo-1712215544003-af10130f8eb3?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
         bio: 'Experienced general physician delivering compassionate primary care.',
         social: {
           facebook: 'https://facebook.com/doctor-amir',
@@ -86,7 +88,7 @@ app.get('/api/seed', async (req, res) => {
         title: 'Preparing for Your Appointment',
         author: 'Dr. Amir Ali',
         date: 'April 14, 2026',
-        image: 'https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?auto=format&fit=crop&w=800&q=80',
+        image: 'https://images.unsplash.com/photo-1712215544003-af10130f8eb3?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
         excerpt: 'What to bring and how to plan before seeing your doctor.',
         content: 'Write down your symptoms, medications, and questions before your visit to get the most from your appointment.'
       }
@@ -108,7 +110,23 @@ app.get('/api/seed', async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+const BASE_PORT = parseInt(process.env.PORT, 10) || 5000;
+
+const startServer = (port) => {
+  const server = app.listen(port, () => {
+    console.log(`Server running on http://localhost:${port}`);
+  });
+
+  server.on('error', (error) => {
+    if (error.code === 'EADDRINUSE') {
+      const fallbackPort = port + 1;
+      console.warn(`Port ${port} is already in use. Trying port ${fallbackPort} instead.`);
+      startServer(fallbackPort);
+    } else {
+      console.error('Server failed to start:', error);
+      process.exit(1);
+    }
+  });
+};
+
+startServer(BASE_PORT);

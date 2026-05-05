@@ -45,6 +45,22 @@
   color: var(--dark);
 }
 
+.image-preview {
+  margin-top: 1rem;
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  border-radius: 0.75rem;
+  object-fit: cover;
+  border: 1px solid var(--border);
+}
+
+.status-message {
+  margin-top: 0.75rem;
+  color: var(--primary);
+  font-weight: 600;
+}
+
 .add-blog-form input:focus,
 .add-blog-form textarea:focus {
   outline: none;

@@ -8,19 +8,69 @@ import Reviews from './pages/Reviews';
 import Blogs from './pages/Blogs';
 import BlogDetail from './pages/BlogDetail';
 import Services from './pages/Services';
+import services from './data/servicesData';
 import SearchResults from './pages/SearchResults';
+import { API_URL } from './api';
 import './App.css';
 
 function AppContent() {
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
-  const handleSearch = (e) => {
+  const handleSearch = async (e) => {
     e.preventDefault();
     const trimmed = searchTerm.trim();
-    if (trimmed) {
-      navigate(`/search?q=${encodeURIComponent(trimmed)}`);
+    if (!trimmed) return;
+
+    const normalizedQuery = trimmed.toLowerCase();
+
+    const routeKeywords = [
+      { keywords: ['appointment', 'appointments', 'book'], path: '/appointments' },
+      { keywords: ['review', 'reviews', 'feedback'], path: '/reviews' },
+      { keywords: ['blog', 'blogs', 'article'], path: '/blogs' }
+    ];
+
+    for (const item of routeKeywords) {
+      if (item.keywords.some((keyword) => normalizedQuery.includes(keyword))) {
+        navigate(item.path);
+        return;
+      }
     }
+
+    const serviceMatches = services.filter((service) => {
+      const text = `${service.title} ${service.description}`.toLowerCase();
+      return text.includes(normalizedQuery);
+    });
+
+    if (serviceMatches.length > 0) {
+      navigate(`/services?q=${encodeURIComponent(trimmed)}`);
+      return;
+    }
+
+    try {
+      const res = await fetch(`${API_URL}/doctors`);
+      if (res.ok) {
+        const data = await res.json();
+        const doctorMatches = data.filter((doctor) => {
+          const text = `${doctor.name} ${doctor.speciality} ${doctor.bio}`.toLowerCase();
+          return text.includes(normalizedQuery);
+        });
+
+        if (doctorMatches.length === 1) {
+          navigate(`/doctors/${doctorMatches[0]._id}`);
+          return;
+        }
+
+        if (doctorMatches.length > 1) {
+          navigate(`/doctors?q=${encodeURIComponent(trimmed)}`);
+          return;
+        }
+      }
+    } catch (error) {
+      console.error('Search doctor lookup failed:', error);
+    }
+
+    navigate(`/search?q=${encodeURIComponent(trimmed)}`);
   };
 
   return (
