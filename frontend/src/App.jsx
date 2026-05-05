@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Home from './pages/Home';
 import Doctors from './pages/Doctors';
@@ -8,15 +8,18 @@ import Reviews from './pages/Reviews';
 import Blogs from './pages/Blogs';
 import BlogDetail from './pages/BlogDetail';
 import Services from './pages/Services';
+import SearchResults from './pages/SearchResults';
 import './App.css';
 
 function AppContent() {
   const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
 
   const handleSearch = (e) => {
     e.preventDefault();
-    if (searchTerm.trim()) {
-      console.log('Search:', searchTerm);
+    const trimmed = searchTerm.trim();
+    if (trimmed) {
+      navigate(`/search?q=${encodeURIComponent(trimmed)}`);
     }
   };
 
@@ -57,6 +60,7 @@ function AppContent() {
           <Route path="/reviews" element={<Reviews />} />
           <Route path="/blogs" element={<Blogs />} />
           <Route path="/blogs/:id" element={<BlogDetail />} />
+          <Route path="/search" element={<SearchResults />} />
         </Routes>
       </main>
 

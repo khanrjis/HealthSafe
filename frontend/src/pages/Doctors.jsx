@@ -55,7 +55,13 @@ export default function Doctors() {
     loadDoctors();
   }, []);
 
-  const filtered = filter ? doctors.filter(d => d.speciality.toLowerCase().includes(filter.toLowerCase())) : doctors;
+  const normalizedFilter = filter.toLowerCase();
+  const filtered = filter
+    ? doctors.filter((doctor) => {
+        const text = `${doctor.name} ${doctor.speciality}`.toLowerCase();
+        return text.includes(normalizedFilter);
+      })
+    : doctors;
 
   return (
     <div className="doctors-page">
